@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Static checks for the telltale plugin.
 
 Complements `claude plugin validate --strict` (run that too when the Claude

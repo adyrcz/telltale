@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 cat > chapter-01.md <<'CHAPTER'
 # Chapter One

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Text extraction and counting helper for TellTale. Never modifies the input files.
 
 Usage:
@@ -94,8 +93,8 @@ def _tidy(text: str) -> str:
 
 
 def _docx(z: zipfile.ZipFile) -> str:
-    w = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
     root = ET.fromstring(z.read("word/document.xml"))
+    w = root.tag[: root.tag.index("}") + 1]  # the WordprocessingML namespace, as the file declares it
     paras = []
     for p in root.iter(f"{w}p"):
         bits = []
