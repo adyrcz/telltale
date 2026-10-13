@@ -11,7 +11,7 @@ Cases for `claude plugin eval` (Claude Code v2.1.269 or later). Each folder is o
 | human-passage-calibration | core | A passage written in the human range is not rated High or Very high |
 | blocking-issues | core | TODO and 🚩 markers are listed first and kept out of the scores |
 | nonfiction-no-trigger | core | The skill does not fire on non-fiction (a cover letter) |
-| no-target-asks | core | With nothing to read, it asks for a target instead of inventing an assessment |
+| no-target-asks | core | With nothing to read, it asks for a target instead of inventing an assessment. It doesn't require the skill to load, since asking first is the right move either way |
 | session-target | scaffold | With one chapter in the folder and no file named, it picks that chapter, says so, and scores it |
 | save-writes-file | scaffold, write | "Save the report" writes `telltale-assess-*.md` and replies with a short summary and the path |
 | docx-input | scaffold, bash | A Word file is actually read (its TODO marker is found), not scored as empty, and never edited |
