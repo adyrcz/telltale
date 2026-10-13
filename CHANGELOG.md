@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3 (2026-10-13)
+
+- PRIVACY.md, plus documentation, support, and privacy links in plugin.json for the directory listing.
+- evals/README rewritten as a list; the two scaffold cases that need extra tools share a `tools` tag.
+
 ## 0.1.2 (2026-10-13)
 
 - Plugin icon for the directory listing.

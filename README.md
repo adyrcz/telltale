@@ -304,6 +304,7 @@ skills/telltale/
 .github/workflows/       validate.yml: runs the checks on every pull request
 evals/                   claude plugin eval cases
 scripts/validate.py      static checks (no dependencies)
+PRIVACY.md               what the plugin reads, writes, and sends (nothing)
 ```
 
 ## Contributing
