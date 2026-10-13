@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 (2026-10-13)
+
+- Plugin icon for the directory listing.
+- Probe script: reads the Word XML namespace from each file instead of hardcoding it; no env-style shebangs; clearer "save a copy as .docx" skip messages.
+- Repeat check now includes each file's final 9-word run (it was skipped by an off-by-one).
+
 ## 0.1.1 (2026-10-13)
 
 - Help screen rewrapped to 72 columns so chat windows don't cut it off; the validator now enforces the width.

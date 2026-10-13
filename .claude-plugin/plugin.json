@@ -1,7 +1,7 @@
 {
   "name": "telltale",
   "displayName": "TellTale",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Find the tells in your tale. TellTale reads fiction at two levels, the sentences and the story underneath them, and catches what line edits miss: stakes that never rise, a theme the narrator spells out. It ranks what to fix first, for one chapter or a whole manuscript in Markdown, Word, EPUB, or PDF. A craft signal, not an AI detector.",
   "author": {
     "name": "Andy Dyrcz",
