@@ -229,7 +229,7 @@ Every run uses Claude like any other request in your session. On a Pro or Max pl
 
 How these are built: Claude re-reads the whole conversation on every step, so "processed" counts each re-read; most of it hits the prompt cache, which costs a fraction of fresh input ($0.20 per million tokens on Opus 5.5 and Sonnet 5.5, against $4 and $2 for fresh input; output is $20 and $10 per million). Prices are Anthropic's first-party API rates as of October 2026; other platforms differ. Higher effort settings and longer reports raise the output side.
 
-**Measured so far:** across seven eval cases on short passages (October 2026, Claude Code's default model), a run with TellTale cost **$0.11–$0.40**, inside the passage estimate above. Chapter and manuscript figures are still estimates.
+**Measured so far:** across ten eval cases on short passages (October 2026, Claude Code's default model), a run with TellTale cost **$0.11–$0.55**. Plain assess or score requests landed at $0.11–$0.40; runs that also write a report file or convert a Word document landed at $0.37–$0.55. Chapter and manuscript figures are still estimates.
 
 Start with one chapter, and check your session's usage afterward to see what a run costs you.
 
