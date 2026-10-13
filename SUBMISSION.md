@@ -45,7 +45,7 @@ find . -name .DS_Store
 ## 3. Publish the repository
 
 1. Create a GitHub repository, for example `adyrcz/telltale`. The plugin sits at the repository root, which avoids several directory review holds that apply to plugins in subfolders.
-2. Commit and push. Tag the first release `v0.1.0` if you want the directory to track a tag instead of a branch.
+2. Commit and push. The first public release is tagged `v0.1.1` (0.1.0 was never tagged); point the directory at that tag if you want it to track a tag instead of a branch.
 
 ## 4. Let people install it from your repo (self-hosted marketplace)
 

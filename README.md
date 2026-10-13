@@ -34,6 +34,20 @@ claude plugin marketplace add adyrcz/telltale
 claude plugin install telltale@telltale-marketplace
 ```
 
+If adding the marketplace stalls or fails with an SSH error (common when you have no SSH key set up for GitHub), tell Claude Code to use HTTPS and try again:
+
+```bash
+export CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1
+```
+
+Plugins don't update automatically from marketplaces you add yourself. To get a new version:
+
+```bash
+claude plugin marketplace update telltale-marketplace
+```
+
+Then run `/plugin`, update TellTale, and start a new session.
+
 To try it from a local clone without installing:
 
 ```bash

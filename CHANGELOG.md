@@ -1,10 +1,10 @@
 # Changelog
 
-## 0.1.1 (unreleased)
+## 0.1.1 (2026-10-13)
 
 - Help screen rewrapped to 72 columns so chat windows don't cut it off; the validator now enforces the width.
 
-## 0.1.0 (unreleased)
+## 0.1.0 (2026-10-13)
 
 - Named **TellTale** (`telltale`).
 - Listing description rewritten ("Find the tells in your tale…") and kept identical in `plugin.json` and `marketplace.json` by the validator; keywords add `manuscript`, `docx`, `epub`.
