@@ -1,5 +1,5 @@
 schema_version: "1.1"
 name: docx-input
-tags: [scaffold, bash]
+tags: [scaffold, tools]
 context:
   scaffold_script: docx-input-fixture.sh
