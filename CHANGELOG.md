@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 (unreleased)
+
+- Help screen rewrapped to 72 columns so chat windows don't cut it off; the validator now enforces the width.
+
 ## 0.1.0 (unreleased)
 
 - Named **TellTale** (`telltale`).

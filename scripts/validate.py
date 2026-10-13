@@ -164,6 +164,9 @@ else:
         err("commands/help.md: help screen must be in a ```text block")
     else:
         help_text = m.group(1)
+        wide = [l for l in help_text.splitlines() if len(l) > 72]
+        if wide:
+            err(f"commands/help.md: {len(wide)} help line(s) over 72 characters; chat windows cut them off")
         # Every command file must be listed in the help screen, and nothing else.
         listed = set(re.findall(r"/telltale:(\w+)", help_text))
         actual = {f.stem for f in (ROOT / "commands").glob("*.md")}
@@ -172,8 +175,11 @@ else:
         for extra in sorted(listed - actual):
             err(f"help screen lists /telltale:{extra}, which has no command file")
 
-if help_text is not None and help_text not in (ROOT / "README.md").read_text(encoding="utf-8"):
-    err("README.md: help screen differs from commands/help.md")
+if help_text is not None:
+    readme_blocks = re.findall(r"```text\n(.*?)\n```", (ROOT / "README.md").read_text(encoding="utf-8"), re.S)
+    help_blocks = [b for b in readme_blocks if b.startswith("TellTale: find the tells")]
+    if help_blocks != [help_text]:
+        err("README.md: needs exactly one help-screen block, identical to commands/help.md")
 
 for name in ("assess", "score", "revise"):
     cmd = ROOT / "commands" / f"{name}.md"
