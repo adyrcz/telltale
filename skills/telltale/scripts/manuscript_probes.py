@@ -50,8 +50,8 @@ ZIP_EXT = {".docx", ".odt", ".epub"}
 TEXTUTIL_EXT = {".rtf", ".doc", ".rtfd", ".wordml", ".webarchive"}
 PDF_EXT = {".pdf"}
 KNOWN_EXT = TEXT_EXT | HTML_EXT | ZIP_EXT | TEXTUTIL_EXT | PDF_EXT
-# Export-first formats: listed with advice instead of guessed at.
-EXPORT_FIRST = {".pages": "export from Pages as .docx", ".scriv": "compile from Scrivener as .docx or .md",
+# Formats to save as .docx first: listed with advice instead of guessed at.
+SAVE_AS_FIRST = {".pages": "in Pages, save a copy as .docx", ".scriv": "compile from Scrivener as .docx or .md",
                 ".gdoc": "download from Google Docs as .docx"}
 
 
@@ -184,13 +184,13 @@ def read_any(path: Path) -> tuple[str | None, str]:
                 return _one_line_per_para(_run(["textutil", "-convert", "txt", "-stdout", str(path)])), "textutil"
             if shutil.which("pandoc"):
                 return _one_line_per_para(_run(["pandoc", "-t", "plain", "--wrap=none", str(path)])), "pandoc"
-            return None, "needs macOS textutil or pandoc; or export as .docx/.md"
+            return None, "needs macOS textutil or pandoc; or save a copy as .docx or .md"
         if ext in PDF_EXT:
             if shutil.which("pdftotext"):
                 return _pdf_cleanup(_run(["pdftotext", "-layout", str(path), "-"])), "pdftotext"
             return None, "no pdftotext; read the PDF with Claude's file reader instead"
-        if ext in EXPORT_FIRST:
-            return None, EXPORT_FIRST[ext]
+        if ext in SAVE_AS_FIRST:
+            return None, SAVE_AS_FIRST[ext]
         return None, f"unsupported format {ext or '(none)'}"
     except (zipfile.BadZipFile, KeyError, ET.ParseError, StopIteration, subprocess.SubprocessError, OSError) as e:
         return None, f"could not read ({type(e).__name__})"
@@ -204,14 +204,14 @@ def expand(args: list[str]) -> tuple[list[Path], list[str]]:
     files, skipped = [], []
     for a in args:
         p = Path(a)
-        if p.is_dir() and p.suffix.lower() not in EXPORT_FIRST:
+        if p.is_dir() and p.suffix.lower() not in SAVE_AS_FIRST:
             for f in sorted(p.iterdir(), key=_natural):
                 if f.name.startswith(("_", ".")):
                     continue
                 if f.suffix.lower() in KNOWN_EXT:
                     files.append(f)
-                elif f.suffix.lower() in EXPORT_FIRST or (f.is_file() and f.suffix):
-                    skipped.append(f"{f.name}: {EXPORT_FIRST.get(f.suffix.lower(), 'unsupported format ' + f.suffix)}")
+                elif f.suffix.lower() in SAVE_AS_FIRST or (f.is_file() and f.suffix):
+                    skipped.append(f"{f.name}: {SAVE_AS_FIRST.get(f.suffix.lower(), 'unsupported format ' + f.suffix)}")
         elif p.exists():
             files.append(p)
         else:
@@ -245,7 +245,7 @@ def main(argv: list[str]) -> int:
         words = len(text.split())
         # Guard against a silent false all-clear: a real file that yields almost no text.
         if size > 10_000 and words < 50:
-            skipped.append(f"{f.name}: extracted only {words} words from {size:,} bytes; check the file or export it")
+            skipped.append(f"{f.name}: extracted only {words} words from {size:,} bytes; check the file or save a fresh copy")
             continue
         texts.append((f, text))
 
@@ -270,7 +270,7 @@ def main(argv: list[str]) -> int:
 
 
 def report(texts: list[tuple[Path, str]]) -> None:
-    grams: dict[str, set[str]] = collections.defaultdict(set)
+    grams: dict[str, dict[str, None]] = collections.defaultdict(dict)  # n-gram -> files (ordered keys)
     print(f"{'file':40s} {'words':>7s} {'dlg%':>5s} {'emdash':>6s} {'scenes':>6s} {'short-end':>9s} {'blocking':>8s}")
     totals = collections.Counter()
     blocking_lines: list[str] = []
@@ -298,8 +298,8 @@ def report(texts: list[tuple[Path, str]]) -> None:
         totals.update(words=n, dlg=dlg, emdash=text.count("—"), scenes=len(scenes), short=short)
 
         toks = re.findall(r"[a-z0-9']+", text.lower())
-        for i in range(len(toks) - NGRAM):
-            grams[" ".join(toks[i:i + NGRAM])].add(f.name)
+        for i in range(len(toks) - NGRAM + 1):
+            grams[" ".join(toks[i:i + NGRAM])][f.name] = None
 
     w = max(totals["words"], 1)
     print(f"\nTOTAL words {totals['words']} · dialogue {100 * totals['dlg'] / w:.0f}% · "
