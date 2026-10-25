@@ -1,6 +1,6 @@
 # Eval suite
 
-Cases for `claude plugin eval` (Claude Code v2.1.269 or later). Each folder is one case: `prompt.md` holds the user prompt, `graders/` holds the checks, and `case.yaml` (when present) names a fixture script that writes the sample files the case needs.
+Cases for `claude plugin eval` (Claude Code v2.1.269 or later). They live outside `plugin/` so they aren't installed with the plugin; `scripts/run-evals.sh` copies the plugin and this folder into a git-ignored work folder and runs them there. Each folder is one case: `prompt.md` holds the user prompt, `graders/` holds the checks, and `case.yaml` (when present) names a fixture script that writes the sample files the case needs.
 
 ## Cases
 
@@ -23,24 +23,24 @@ Tagged `scaffold` (these start from sample files):
 
 ## Running
 
-Run from the repository root. Every run uses real model calls (about $0.10–$0.40 per case per arm on passages; see the README's cost section). Add `--no-publish` to keep reports local; they go to `evals/results/`, which is git-ignored.
+Run from the repository root with `scripts/run-evals.sh`, which passes its options through to `claude plugin eval`. If `claude` isn't on your PATH, set `CLAUDE` to the command, for example `CLAUDE="npx -y @anthropic-ai/claude-code@2.1.296"`. Every run uses real model calls (about $0.10–$0.40 per case per arm on passages; see the README's cost section). Add `--no-publish` to keep reports local. Results and the HTML report go to `evals/results/<timestamp>/`, which is git-ignored.
 
 The core cases need no extra permissions:
 
 ```text
-claude plugin eval . --runs 1 --tag core --no-publish
+scripts/run-evals.sh --runs 1 --tag core --no-publish
 ```
 
 The scaffold cases need `--scaffold` so their sample files exist, and the two `tools` cases also need the Write and Bash tools:
 
 ```text
-claude plugin eval . --runs 1 --tag scaffold --scaffold --allow-tools Write Bash --no-publish
+scripts/run-evals.sh --runs 1 --tag scaffold --scaffold --allow-tools Write Bash --no-publish
 ```
 
 Everything at once:
 
 ```text
-claude plugin eval . --runs 1 --scaffold --allow-tools Write Bash --no-publish
+scripts/run-evals.sh --runs 1 --scaffold --allow-tools Write Bash --no-publish
 ```
 
 About `--scaffold`: the fixture scripts in this suite are short and local. They write a sample chapter into the run's empty workspace, and `docx-input` also assembles a small Word file with Python's standard library. Nothing is fetched from the network. Read them before passing the flag, as you would for any suite. Granted tools run inside Claude Code's sandbox.

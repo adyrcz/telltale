@@ -14,11 +14,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 3.9 is the python3 that ships with macOS, which many users run the probe script on.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Plugin checks on Python 3.9 (scripts/validate.py)
+        run: python3 -I scripts/validate.py
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Plugin checks (scripts/validate.py)
+      - name: Plugin checks on Python 3.12 (scripts/validate.py)
         run: python3 -I scripts/validate.py
 
       - uses: actions/setup-node@v4
@@ -28,5 +36,5 @@ jobs:
       # Official schema checks. Pinned so a new Claude Code release can't change results without a commit here.
       - name: claude plugin validate --strict
         run: |
-          npx -y @anthropic-ai/claude-code@2.1.296 plugin validate .claude-plugin/plugin.json --strict
+          npx -y @anthropic-ai/claude-code@2.1.296 plugin validate plugin/.claude-plugin/plugin.json --strict
           npx -y @anthropic-ai/claude-code@2.1.296 plugin validate .claude-plugin/marketplace.json --strict

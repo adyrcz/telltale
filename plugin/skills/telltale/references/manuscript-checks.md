@@ -147,7 +147,7 @@ Some books carry apparatus inside the story by design: lesson boxes after each c
 
 - **Do not score the apparatus as a tell for existing.** It is the genre's licensed place for explicit lessons. It often carries human-leaning features too, such as direct reader address and named references.
 - **Score its redundancy.** The finding is the same lesson stated in the scene, then in the closer, then in the apparatus, then in an epilogue.
-- **Exclude apparatus from line-level densities.** Note its share of total words.
+- **Exclude apparatus from line-level densities** (line-level-tells.md rule 7, which applies at every span). Note its share of total words.
 - **Ask the author about conventions they have declared,** such as "em dashes only inside interrupted dialogue." Treat breaks of those conventions as blocking issues (see report-format.md), and label deliberate stylistic choices "likely intentional."
 
 ## 12. Ranking interventions

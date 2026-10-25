@@ -17,7 +17,17 @@ Layer 2 is what this plugin is built around. In the StoryScope study, narrative 
 
 ## Install
 
-From inside Claude Code:
+**From the Claude plugin directory (recommended).** Search for **TellTale** in the plugin directory: in the Claude apps under **Customize → Plugins**, or with `/plugin` in Claude Code. In Claude Code you can also install it directly:
+
+```bash
+claude plugin install telltale@anthropic-plugin-directory
+```
+
+The directory version is the reviewed release.
+
+**When you install, Claude warns that TellTale "includes components that run code."** That warning appears for any plugin that ships a script. TellTale ships one: [`manuscript_probes.py`](https://github.com/adyrcz/telltale/blob/main/plugin/skills/telltale/scripts/manuscript_probes.py), a short, readable Python script that uses only the standard library. It reads only the files you point TellTale at, makes no network calls, and runs only through Claude's normal tool-permission prompt, so you see each run. See [What it runs and writes](#what-it-runs-and-writes) for everything else.
+
+**From this repository**, for the latest unreviewed version. From inside Claude Code:
 
 ```
 /plugin marketplace add adyrcz/telltale
@@ -51,7 +61,7 @@ Then run `/plugin`, update TellTale, and start a new session.
 To try it from a local clone without installing:
 
 ```bash
-claude --plugin-dir ./telltale
+claude --plugin-dir ./telltale/plugin
 ```
 
 ## Quick start
@@ -226,7 +236,7 @@ TellTale is instructions and reference files for Claude, plus one optional helpe
 
 **Reads.** Only the files, folders, or text you point it at (or, with a bare command, the file you were already working on in the session).
 
-**Runs.** Claude's standard file tools (read, search, list). For manuscripts and non-text formats, Claude may also run `skills/telltale/scripts/manuscript_probes.py`, a Python script that uses only the standard library. To convert RTF, `.doc`, or PDF it calls tools already on your machine if they're installed: `textutil` (built into macOS), `pandoc`, or `pdftotext`. Nothing else is executed.
+**Runs.** Claude's standard file tools (read, search, list). For manuscripts and non-text formats, Claude may also run `skills/telltale/scripts/manuscript_probes.py` (in this repo, under `plugin/`), a Python script that uses only the standard library. To convert RTF, `.doc`, or PDF it calls tools already on your machine if they're installed: `textutil` (built into macOS), `pandoc`, or `pdftotext`. Nothing else is executed.
 
 **Sends.** The plugin makes no network calls and collects no telemetry. The text it reads is processed by Claude as part of your session, under the same terms as anything else you share with Claude.
 
@@ -235,7 +245,7 @@ TellTale is instructions and reference files for Claude, plus one optional helpe
 - Plain-text copies of Word, EPUB, PDF, and similar files, so they can be read. These go in a temporary or scratch location, never inside your manuscript folder.
 - Edits to your own `.md` or `.txt` files, only in revise mode and only when you explicitly ask for changes to be applied. It never writes into Word, EPUB, PDF, or other non-text originals.
 
-For contributors, `scripts/validate.py` checks the plugin's own files and runs on every pull request; it never touches your writing.
+Contributor tools (`scripts/validate.py`, `scripts/run-evals.sh`, the eval suite, and CI) live outside the `plugin/` folder and are not installed with the plugin.
 
 ## Cost per run
 
@@ -267,7 +277,7 @@ Start with one chapter, and check your session's usage afterward to see what a r
 5. **Scoring** into per-dimension signal scores, layer scores, and the overall rating.
 6. **Manuscript-scale checks** for whole books, which per-scene checks miss: outcome valence by half (do crises get *easier* while threats grow?), whether the climax is the hardest or easiest crisis, a skeptic-conversion ledger, antagonist presence, a setups-and-payoffs audit, a theme-restatement count, chapter-template and ending sameness, blindness vs. real choice, cross-chapter verbatim repeats, and a continuity pass. A small read-only script does the counting when a shell is available.
 
-Two worked examples show complete output: [a passage in revise mode](skills/telltale/examples/passage-assessment.md) and [a whole story scored on structure](skills/telltale/examples/story-structure-assessment.md).
+Two worked examples show complete output: [a passage in revise mode](https://github.com/adyrcz/telltale/blob/main/plugin/skills/telltale/examples/passage-assessment.md) and [a whole story scored on structure](https://github.com/adyrcz/telltale/blob/main/plugin/skills/telltale/examples/story-structure-assessment.md).
 
 ## Sources and attribution
 
@@ -281,29 +291,36 @@ This project is not affiliated with the StoryScope authors, Wikipedia, or Anthro
 
 ## Repository layout
 
+Only `plugin/` is installed. Everything else is for contributors.
+
 ```
+plugin/                  the plugin itself (what users install)
+  .claude-plugin/
+    plugin.json          plugin manifest
+    icon.png             directory listing icon
+  commands/
+    assess.md, score.md, revise.md, help.md   /telltale:assess, :score, :revise, :help
+  skills/telltale/
+    SKILL.md             workflow, modes, ground rules
+    references/
+      narrative-structure.md   StoryScope dimensions, priority checks, 30 core features, fingerprints
+      line-level-tells.md      tell catalog with detection, thresholds, false-positive rules
+      scoring.md               rubric, layer scores, overall rating, blocking issues
+      report-format.md         output templates, file output, length budgets
+      manuscript-checks.md     book-scale checks M1–M10
+      input-formats.md         reading Word, EPUB, PDF, and other formats safely
+    scripts/
+      manuscript_probes.py     reads .md/.docx/.odt/.epub/.html (+ RTF, PDF via system tools); counts and plain-text extraction
+    examples/
+      passage-assessment.md
+      story-structure-assessment.md
+  README.md, LICENSE     copies of the root files (kept identical by the validator)
 .claude-plugin/
-  plugin.json            plugin manifest
-  marketplace.json       single-repo marketplace listing
-commands/
-  assess.md, score.md, revise.md, help.md   /telltale:assess, :score, :revise, :help
-skills/telltale/
-  SKILL.md               workflow, modes, ground rules
-  references/
-    narrative-structure.md   StoryScope dimensions, priority checks, 30 core features, fingerprints
-    line-level-tells.md      tell catalog with detection, thresholds, false-positive rules
-    scoring.md               rubric, layer scores, overall rating, blocking issues
-    report-format.md         output templates, file output, length budgets
-    manuscript-checks.md     book-scale checks M1–M10
-    input-formats.md         reading Word, EPUB, PDF, and other formats safely
-  scripts/
-    manuscript_probes.py     reads .md/.docx/.odt/.epub/.html (+ RTF, PDF via system tools); counts and plain-text extraction
-  examples/
-    passage-assessment.md
-    story-structure-assessment.md
+  marketplace.json       single-repo marketplace listing (source: ./plugin)
 .github/workflows/       validate.yml: runs the checks on every pull request
-evals/                   claude plugin eval cases
+evals/                   claude plugin eval cases (run with scripts/run-evals.sh)
 scripts/validate.py      static checks (no dependencies)
+scripts/run-evals.sh     runs the eval suite against plugin/
 PRIVACY.md               what the plugin reads, writes, and sends (nothing)
 ```
 
@@ -323,17 +340,17 @@ python3 scripts/validate.py
 ```
 
 ```bash
-claude plugin validate . --strict
+claude plugin validate plugin --strict
 ```
 
 ```bash
-claude plugin eval . --runs 1 --tag core --no-publish
+scripts/run-evals.sh --runs 1 --tag core --no-publish
 ```
 
-The [eval README](evals/README.md) covers the full suite, including the cases that need `--scaffold`.
+The [eval README](https://github.com/adyrcz/telltale/blob/main/evals/README.md) covers the full suite, including the cases that need `--scaffold`.
 
-Keep `SKILL.md` short; put detail in `references/`. Keep the honest framing: no detector-evasion claims, no authorship verdicts. Bump `version` in both `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` for any user-visible change, and note it in `CHANGELOG.md`.
+Keep `SKILL.md` short; put detail in `references/`. Keep the honest framing: no detector-evasion claims, no authorship verdicts. Bump `version` in both `plugin/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` for any user-visible change, and note it in `CHANGELOG.md`.
 
 ## License
 
-[MIT](LICENSE).
+[MIT](https://github.com/adyrcz/telltale/blob/main/LICENSE).

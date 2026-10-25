@@ -6,7 +6,7 @@ Nothing in this repository has been pushed or submitted. Every step below is you
 
 ## 1. Author and repository details (done)
 
-Author **Andy Dyrcz**, GitHub **adyrcz**, repository `adyrcz/telltale`. These are set in `.claude-plugin/plugin.json` (`author`, `homepage`, `repository`), `.claude-plugin/marketplace.json` (`owner`), `README.md` (install commands), and `LICENSE` (copyright line).
+Author **Andy Dyrcz**, GitHub **adyrcz**, repository `adyrcz/telltale`. These are set in `plugin/.claude-plugin/plugin.json` (`author`, `homepage`, `repository`), `.claude-plugin/marketplace.json` (`owner`), `README.md` (install commands), and `LICENSE` (copyright line).
 
 Optional fields in `plugin.json`: `author.email`; and for the directory listing, `icon`, `documentationUrl`, `supportUrl` (https URLs; Claude Code ignores them at load time).
 
@@ -17,7 +17,11 @@ python3 scripts/validate.py
 ```
 
 ```bash
-claude plugin validate . --strict
+claude plugin validate plugin --strict
+```
+
+```bash
+claude plugin validate .claude-plugin/marketplace.json --strict
 ```
 
 `--strict` turns warnings into failures. The local validator catches syntax and schema problems only; the directory portal runs more checks (step 6).
@@ -25,7 +29,7 @@ claude plugin validate . --strict
 Try the plugin in a real session:
 
 ```bash
-claude --plugin-dir .
+claude --plugin-dir ./plugin
 ```
 
 Then ask it to assess one of the passages in `evals/`, and run `/reload-plugins` after edits.
@@ -45,11 +49,11 @@ find . -name .DS_Store
 ## 3. Publish the repository
 
 1. Create a GitHub repository, for example `adyrcz/telltale`. The plugin sits at the repository root, which avoids several directory review holds that apply to plugins in subfolders.
-2. Commit and push. The directory submission tracks the newest release tag (now `v0.1.3`) (0.1.0 was never tagged; v0.1.1 predates the icon and scanner fixes); point the directory at the newest tag if you want it to track a tag instead of a branch.
+2. Commit and push. The directory submission tracks the newest release tag (now `v0.1.4`) (0.1.0 was never tagged; v0.1.1 predates the icon and scanner fixes); point the directory at the newest tag if you want it to track a tag instead of a branch.
 
 ## 4. Let people install it from your repo (self-hosted marketplace)
 
-The repo is already its own marketplace: `.claude-plugin/marketplace.json` lists one plugin with `"source": "./"`. Users run:
+The repo is already its own marketplace: `.claude-plugin/marketplace.json` lists one plugin with `"source": "./plugin"`. Users run:
 
 ```
 /plugin marketplace add adyrcz/telltale
@@ -96,7 +100,7 @@ What the directory checks that matters here:
 - README of at least 40 words outside code blocks, and a license (both present).
 - No `.DS_Store` or similar system files; every non-image file under 256 KiB; 512 files or fewer.
 - Valid YAML frontmatter in `SKILL.md` with a text `description` (present). The skill uses only portable frontmatter keys (`name`, `description`, `license`), so it also loads in claude.ai chat and Cowork, where the directory lists plugins too.
-- After you submit, a security scan runs on each new commit. The scan expects everything a plugin runs, sends, or writes to be described in the README; TellTale's "What it runs and writes" section covers it. The skill's helper script (`skills/telltale/scripts/manuscript_probes.py`) is readable Python using only the standard library, and calls `textutil`, `pandoc`, or `pdftotext` only when they are installed. `scripts/validate.py` and the GitHub workflow are contributor tools that never touch user files.
+- After you submit, a security scan runs on each new commit. The scan expects everything a plugin runs, sends, or writes to be described in the README; TellTale's "What it runs and writes" section covers it. The skill's helper script (`plugin/skills/telltale/scripts/manuscript_probes.py`) is readable Python using only the standard library, and calls `textutil`, `pandoc`, or `pdftotext` only when they are installed. `scripts/validate.py`, `scripts/run-evals.sh`, the eval suite, and the GitHub workflow are contributor tools outside `plugin/`; they are not installed and never touch user files. In the directory portal, **Plugin path** is `plugin`.
 
 After a version passes, select **Publish**; by default an Anthropic reviewer publishes it. Later updates are picked up from the tracked branch; raise `version` each release.
 

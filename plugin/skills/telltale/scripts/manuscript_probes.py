@@ -21,6 +21,8 @@ outside the manuscript folder.
 Every number is a lead, not a finding: read each hit in context.
 """
 
+from __future__ import annotations  # keeps `str | None` hints working on Python 3.9 (stock macOS)
+
 import collections
 import html.parser
 import posixpath

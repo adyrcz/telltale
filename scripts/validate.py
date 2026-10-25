@@ -3,7 +3,7 @@
 Complements `claude plugin validate --strict` (run that too when the Claude
 Code CLI is available). Standard library only. Exit code 0 = all checks pass.
 
-Usage: python3 scripts/validate.py
+Usage: python3 scripts/validate.py   (checks plugin/ plus the repo around it)
 """
 
 import json
@@ -12,7 +12,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILL_DIR = ROOT / "skills" / "telltale"
+PLUGIN = ROOT / "plugin"  # everything users install; dev tools stay outside
+SKILL_DIR = PLUGIN / "skills" / "telltale"
 errors: list[str] = []
 warnings: list[str] = []
 
@@ -60,7 +61,7 @@ def check_name(label: str, name: str) -> None:
 
 
 # --- manifests -------------------------------------------------------------
-plugin = load_json(ROOT / ".claude-plugin" / "plugin.json")
+plugin = load_json(PLUGIN / ".claude-plugin" / "plugin.json")
 market = load_json(ROOT / ".claude-plugin" / "marketplace.json")
 
 if plugin:
@@ -81,8 +82,8 @@ if market:
         err("marketplace.json: no entry matches plugin.json name")
     else:
         entry = match[0]
-        if entry.get("source") != "./":
-            warn("marketplace.json: expected source './' for a single-repo marketplace")
+        if entry.get("source") != "./plugin":
+            err("marketplace.json: source must be './plugin'")
         if entry.get("description") != plugin.get("description"):
             err("marketplace.json: entry description differs from plugin.json description")
         if entry.get("version") and entry.get("version") != plugin.get("version"):
@@ -91,7 +92,7 @@ if market:
 # --- SKILL.md --------------------------------------------------------------
 skill_md = SKILL_DIR / "SKILL.md"
 if not skill_md.exists():
-    err("missing skills/telltale/SKILL.md")
+    err("missing plugin/skills/telltale/SKILL.md")
 else:
     text = skill_md.read_text(encoding="utf-8")
     fm, body = parse_frontmatter(text)
@@ -143,14 +144,14 @@ for f in sorted((SKILL_DIR / "references").glob("*.md")):
 # --- content guardrails ----------------------------------------------------
 # The plugin must not market itself as detector evasion.
 evasion = re.compile(r"\b(undetectable|bypass(es|ing)? (ai )?detect|evade(s)? (ai )?detect|beat(s)? (gptzero|turnitin))", re.I)
-for f in list(ROOT.glob("*.md")) + list(SKILL_DIR.rglob("*.md")):
+for f in list(ROOT.glob("*.md")) + list(PLUGIN.rglob("*.md")):
     for i, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
         if evasion.search(line) and not re.search(r"\b(not|never|no|don't|do not|nor)\b", line, re.I):
             err(f"{f.relative_to(ROOT)}:{i}: reads as a detector-evasion claim")
 
 # --- commands --------------------------------------------------------------
 FENCE = re.compile(r"```text\n(.*?)\n```", re.S)
-help_md = ROOT / "commands" / "help.md"
+help_md = PLUGIN / "commands" / "help.md"
 help_text = None
 if not help_md.exists():
     err("missing commands/help.md")
@@ -168,7 +169,7 @@ else:
             err(f"commands/help.md: {len(wide)} help line(s) over 72 characters; chat windows cut them off")
         # Every command file must be listed in the help screen, and nothing else.
         listed = set(re.findall(r"/telltale:(\w+)", help_text))
-        actual = {f.stem for f in (ROOT / "commands").glob("*.md")}
+        actual = {f.stem for f in (PLUGIN / "commands").glob("*.md")}
         for missing in sorted(actual - listed):
             err(f"help screen does not list /telltale:{missing}")
         for extra in sorted(listed - actual):
@@ -181,7 +182,7 @@ if help_text is not None:
         err("README.md: needs exactly one help-screen block, identical to commands/help.md")
 
 for name in ("assess", "score", "revise"):
-    cmd = ROOT / "commands" / f"{name}.md"
+    cmd = PLUGIN / "commands" / f"{name}.md"
     if not cmd.exists():
         err(f"missing commands/{name}.md")
         continue
@@ -274,9 +275,30 @@ for case in cases:
                 err(f"evals/{case.name}/graders/{g.name}: max {hi} is below min {lo} (min defaults to 1); this grader can never pass")
 
 # --- required repo files ---------------------------------------------------
-for required in ("README.md", "LICENSE", "SUBMISSION.md"):
+for required in ("README.md", "LICENSE", "SUBMISSION.md", "PRIVACY.md"):
     if not (ROOT / required).exists():
         err(f"missing {required}")
+
+# --- what ships ----------------------------------------------------------------
+# Only plugin/ is installed. Keep dev tools, evals, and CI out of it, and keep
+# its README and LICENSE (which the directory reads) identical to the root ones.
+SHIPS = {".claude-plugin", "commands", "skills", "README.md", "LICENSE"}
+if PLUGIN.exists():
+    for entry in sorted(PLUGIN.iterdir()):
+        if entry.name not in SHIPS and entry.name != ".DS_Store":
+            err(f"plugin/{entry.name}: not part of the plugin; keep dev files outside plugin/")
+    for twin in ("README.md", "LICENSE"):
+        a, b = ROOT / twin, PLUGIN / twin
+        if not b.exists():
+            err(f"missing plugin/{twin} (the directory reads it from the plugin folder)")
+        elif a.exists() and a.read_bytes() != b.read_bytes():
+            err(f"plugin/{twin} differs from {twin}; copy the root file over it")
+    for f in PLUGIN.rglob("*.md"):
+        for target in re.findall(r"\]\(([^)#\s]+)\)", f.read_text(encoding="utf-8")):
+            if f.name == "README.md" and f.parent == PLUGIN and not target.startswith(("http", "#")):
+                err(f"plugin/README.md: relative link '{target}' breaks in one of the two copies; use a full GitHub URL")
+    if not (PLUGIN / ".claude-plugin" / "icon.png").exists():
+        warn("plugin/.claude-plugin/icon.png missing (directory listing icon)")
 
 for w in warnings:
     print(f"warning: {w}")

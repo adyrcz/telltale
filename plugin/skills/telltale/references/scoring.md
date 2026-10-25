@@ -76,8 +76,8 @@ From the structural sweep, report: "**X of Y** assessable core features sit on t
 
 How to read it:
 - The paper's human stories also land on the AI-typical side of many features. The count is context, not a score.
-- Counting: a feature is assessable if the span shows it. Mixed cases (for example, an external outcome plus an internal shift) count toward Y but not X. For spans under about 1,000 words, label the count "rough".
-- Use it to adjust the structural layer by at most one point, and only when Y is 10 or more and the span is at least a full chapter or story: if more than 70% of assessable features are AI-typical, add 1 (maximum 5); if under 40%, subtract 1 (minimum 0) unless a priority row scored 4 or more. State any adjustment.
+- Counting: a feature is assessable if the span shows it. Mixed cases (for example, an external outcome plus an internal shift) count toward Y but not X. For spans under about 1,000 words, label the count "rough". For a chapter or longer, give **exact** whole numbers for X and Y (no "~"), so the thresholds below can be applied.
+- Use it to adjust the structural layer by at most one point, and only when Y is 10 or more and the span is at least a full chapter or story: if more than 70% of assessable features are AI-typical, add 1 (maximum 5); if under 40%, subtract 1 (minimum 0) unless a priority row scored 4 or more. If moving one feature into or out of X would cross a threshold, the count is too close to call: make no adjustment and say so. State any adjustment.
 
 ## 6. Overall reader-notice rating
 

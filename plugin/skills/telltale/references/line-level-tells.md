@@ -35,6 +35,7 @@ For each entry: **Pattern** / **Example** / **Detect** / **Flag when** / **Fix**
 4. **Non-native and translated prose.** Formal word choice, hedges, and careful grammar are common among non-native English writers and in translation. AI-text detectors misfire disproportionately on this writing; do not repeat that mistake. Weight word choice (group B) lightly here.
 5. **Clean grammar is not a tell.** Neither is a formal register or the occasional transition word by itself.
 6. **Genre conventions.** A thriller's short punchy paragraphs, a romance's interior emotion, or a fable's stated moral are conventions. Flag only mechanical repetition within them.
+7. **Embedded apparatus is excluded from line-level counts.** Lesson boxes, field notes, epigraphs, in-world documents, and an author's note are the genre's licensed place for explicit statements. This applies at every span, including a single chapter. Leave their words out of every L-row count and density, and say what share of the words they are. If the apparatus repeats a lesson the scene or a closer already states, that is redundancy: score it under S2, not under L1 or L2.
 
 ## 3. Group A: Rhetorical templates
 

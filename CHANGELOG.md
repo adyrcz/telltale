@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.4 (2026-10-26)
+
+- **Fix:** the probe script failed on Python 3.9, the `python3` that ships with macOS. CI now runs the checks on 3.9 and 3.12.
+- **Only the plugin ships.** The plugin moved into `plugin/`; evals, `scripts/validate.py`, and CI stay outside it and are no longer installed. Evals run through `scripts/run-evals.sh`. In the directory portal, set **Plugin path** to `plugin`.
+- README: install from the plugin directory first, and an explanation of the "components that run code" warning.
+- Scoring: embedded apparatus (lesson boxes, field notes) is left out of line-level counts at every span, not only in manuscript runs. Convergence counts are exact for chapters and longer, and a count within one feature of a threshold makes no adjustment.
+
 ## 0.1.3 (2026-10-13)
 
 - PRIVACY.md, plus documentation, support, and privacy links in plugin.json for the directory listing.
