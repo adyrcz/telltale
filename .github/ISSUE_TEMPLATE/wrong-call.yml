@@ -1,0 +1,46 @@
+name: Wrong call
+description: TellTale flagged something it shouldn't have, or missed something a reader would notice.
+labels: ["wrong call"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks. This is the most useful feedback TellTale gets.
+        **Issues are public.** Paste only a short excerpt of your own writing (a few sentences to a paragraph), never a whole chapter or someone else's published text.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What went wrong?
+      options:
+        - It flagged something that's a deliberate choice or a genre convention
+        - It flagged human-written prose as AI-typical
+        - It missed a tell a reader would notice
+        - A score or rating doesn't match the findings
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: excerpt
+    attributes:
+      label: Short excerpt
+      description: The passage in question, your own writing only.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: said
+    attributes:
+      label: What TellTale said
+      description: Paste the finding, row (for example L1 or S2), and score.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why you think it's wrong
+      description: For example, "this is a deliberate refrain", or "written in 2019, before AI tools".
+  - type: input
+    id: context
+    attributes:
+      label: Mode, span, and where you ran it
+      placeholder: "score · one chapter · Claude app (web)"

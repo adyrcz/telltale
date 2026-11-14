@@ -15,6 +15,10 @@ Layer 2 is what this plugin is built around. In the StoryScope study, narrative 
 
 **It does not help you evade AI detectors.** It makes no claims about detector scores. Published AI-text detectors have high false-positive rates, and they misfire more often on non-native English writers; nobody should treat their output, or this plugin's, as proof of anything. The goal is a revision that a human reader experiences as a story written with deliberate, varied choices.
 
+## Feedback
+
+TellTale gets better when writers tell it where it's wrong. If it flags something that's a deliberate choice, misses a tell a reader would catch, or can't read your file, [open an issue](https://github.com/adyrcz/telltale/issues/new/choose). There are short forms for a wrong call, a file-format problem, and a feature idea. A short excerpt (your own writing, a few sentences) and what TellTale said about it is the most useful thing you can send. Every report ends with this link too.
+
 ## Install
 
 **From the Claude plugin directory (recommended).** Search for **TellTale** in the plugin directory: in the Claude apps under **Customize → Plugins**, or with `/plugin` in Claude Code. In Claude Code you can also install it directly:
@@ -115,12 +119,12 @@ You don't need the commands. Plain requests work too, and Claude loads the skill
 Scoring chapter-01.md (the file we've been working on). Name a different target to change it.
 ```
 
-It reads the saved file from disk. If several files are in play it asks which one; if the file in play is a whole manuscript it asks before starting (those runs are long); and it never guesses at text that only exists in the chat. An explicit target, like `/telltale:score chapter-02.md`, always wins. In a fresh session with nothing to go on, you get a short prompt:
+It reads the saved file from disk. If several files are in play it asks which one; if the file in play is a whole manuscript it asks before starting (those runs are long); and it never guesses at text that only exists in the chat. In the Claude apps, a file you attached to the conversation counts as a file in play. An explicit target, like `/telltale:score chapter-02.md`, always wins. In a fresh session with nothing to go on, you get a short prompt:
 
 ```text
-TellTale assess needs something to read: a file, a folder of chapters, or pasted text.
-e.g.  /telltale:assess chapter-03.md   ·   /telltale:help for all options
-Which passage, file, or folder should I assess?
+TellTale assess needs something to read: attach or paste a passage,
+or name a file or folder, e.g. /telltale:assess chapter-03.md
+What should I assess? (/telltale:help for all options)
 ```
 
 ```text
@@ -134,7 +138,7 @@ TellTale: find the tells in your tale
                               Plot changes only as options.
   /telltale:help              This screen.
 
-  <target>  a file, a folder of chapters, or pasted text
+  <target>  a file or attachment, a folder of chapters, or pasted text
   Options   structure only · line-level only ·
             drafted with <model> · save
 
@@ -142,6 +146,7 @@ TellTale: find the tells in your tale
     /telltale:assess chapter-03.md
     /telltale:score manuscript/ save
     /telltale:revise scene.md structure only
+    Or just ask: "Does this chapter read as AI-written?"
 
   Reading a report
     Blocking issues  leftover TODOs/markers; fix first; not scored
@@ -152,6 +157,8 @@ TellTale: find the tells in your tale
   Tips: start with one chapter; manuscript runs are long.
   In Claude Code, reports on folders save to
   telltale-<mode>-<target>-<date>.md in your working directory.
+
+  Feedback or a wrong call: github.com/adyrcz/telltale/issues
 
   A writing-quality signal, not an AI detector or proof of authorship.
 ```
@@ -221,6 +228,7 @@ S1–S5 always get a concrete finding or a stated reason they scored low.
 - **Structural and line-level findings:** each with quoted evidence, the AI-default pattern it matches, and human-range alternatives.
 - **What's working:** choices to protect.
 - **Revision plan.**
+- **A feedback link** at the very end, for reporting a wrong call. It's only a link; nothing is sent.
 
 Manuscript reports add:
 - a chapter-by-chapter peaks-and-valleys table

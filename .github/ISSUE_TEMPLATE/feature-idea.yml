@@ -1,0 +1,16 @@
+name: Feature idea
+description: A check, mode, or format you'd like TellTale to handle.
+labels: ["idea"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What would you like TellTale to do, and what would it help you fix?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: An example (optional)
+      description: A short example in your own words, or a genre convention it should respect.

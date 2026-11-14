@@ -130,3 +130,5 @@ Layer: the top three rows average 4.0. Convergence is 21 of 26 assessable featur
 **New curve:** 3, 3, 3, 2, 3, 4, 4, 5, 4. Peaks after the midpoint now exceed every earlier beat. Event types: 7 distinct. Resolution: external and partial, driven by another character. Theme: never stated. Ines ends having done right and wrong at once. The Abernathy reveal (from the box of papers in beat 4) is placed in beat 7 so it recasts beat 4.
 
 **Overcorrection check:** the revision now has a cold open, a hidden page, and a late reveal. That's enough. Do not also add a dream sequence or a frame narrator to "diversify."
+
+Feedback or a wrong call? https://github.com/adyrcz/telltale/issues/new/choose

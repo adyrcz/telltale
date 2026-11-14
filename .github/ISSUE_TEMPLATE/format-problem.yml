@@ -1,0 +1,26 @@
+name: File or format problem
+description: TellTale couldn't read a file, read it wrong, or garbled the text.
+labels: ["format"]
+body:
+  - type: markdown
+    attributes:
+      value: "**Issues are public.** Don't attach your manuscript. Describe the file, and paste any error message."
+  - type: input
+    id: format
+    attributes:
+      label: File format and the app that made it
+      placeholder: ".docx from Word for Mac 16.x"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: For example, "reported 12 words for a 40 KB file", "chapters out of order", or "page numbers counted as repeats".
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where you ran it
+      placeholder: "Claude Code on macOS / Claude app (web) / Cowork"

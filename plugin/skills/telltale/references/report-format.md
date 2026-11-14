@@ -60,6 +60,14 @@ For a chapter or longer, add a **Skeleton (condensed)** section after the header
 
 If the user says the text continues beyond what was given, add an **Assumptions** line under the header (for example, "S3 and S4 are provisional: later chapters may change the resolution").
 
+**Footer (all modes, saved reports and chat summaries alike).** End every report with this one line, exactly, and nothing after it:
+
+```
+Feedback or a wrong call? https://github.com/adyrcz/telltale/issues/new/choose
+```
+
+It is a link only: never send anything on the user's behalf, and don't add any other sign-off or promotion.
+
 ## 3. assess
 
 ```
@@ -185,6 +193,7 @@ Fix first:
 2. <one line>
 3. <one line>
 Full report: <path>
+Feedback or a wrong call? https://github.com/adyrcz/telltale/issues/new/choose
 ```
 
 Keep it to 300 words or less. Don't repeat the report.

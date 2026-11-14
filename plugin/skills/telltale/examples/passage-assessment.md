@@ -158,3 +158,5 @@ The revision adds specifics the original didn't have. Each is a stand-in for the
 - **Removed:** two not-X-but-Y reversals, three mirror-weather beats, the smell line, the closing aphorisms, hedges, the embodied-emotion beat.
 - **Added on purpose:** one explicit emotion label ("She was frightened"), which StoryScope found far more often in human fiction (29% vs. 8%), and concrete, checkable specifics (all placeholders, listed above).
 - **Overcorrection check:** the revision has two fragments ("Three days of rain." and "Northern Michigan."). Both carry information, not significance; if the rest of the chapter leans on fragments, cut one.
+
+Feedback or a wrong call? https://github.com/adyrcz/telltale/issues/new/choose

@@ -198,9 +198,17 @@ for name in ("assess", "score", "revise"):
     if not (short.startswith(f"TellTale {name} needs something to read") and f"/telltale:{name} " in short
             and "/telltale:help" in short and len(short.splitlines()) == 3):
         err(f"commands/{name}.md: no-argument reply must be the 3-line short prompt pointing to /telltale:help")
+    if any(len(l) > 72 for l in short.splitlines()):
+        err(f"commands/{name}.md: short prompt has a line over 72 characters; chat windows cut it off")
     for needle in ("infer it from this conversation", "Read the file fresh from disk", "Ask first", "An explicit target always wins"):
         if needle not in cbody:
             err(f"commands/{name}.md: missing session-context targeting rule ({needle!r})")
+
+# --- feedback footer -----------------------------------------------------------
+FOOTER = "Feedback or a wrong call? https://github.com/adyrcz/telltale/issues/new/choose"
+for f in [SKILL_DIR / "references" / "report-format.md", *sorted((SKILL_DIR / "examples").glob("*.md"))]:
+    if f.exists() and FOOTER not in f.read_text(encoding="utf-8"):
+        err(f"{f.relative_to(ROOT)}: missing the feedback footer line")
 
 # --- skill scripts ---------------------------------------------------------
 for script in sorted((SKILL_DIR / "scripts").glob("*.py")):

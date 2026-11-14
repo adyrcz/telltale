@@ -1,6 +1,6 @@
 ---
 description: Suggest rewrites that remove AI tells from fiction without changing plot or meaning.
-argument-hint: "[file, folder, or pasted passage; or nothing, to use the file from this session] [optional: structure only | line-level only | drafted with <model> | save]"
+argument-hint: "[file, attachment, folder, or pasted passage; or nothing, to use the file from this session] [optional: structure only | line-level only | drafted with <model> | save]"
 ---
 
 The user's arguments for `/telltale:revise` are between the markers below.
@@ -15,7 +15,7 @@ ARGUMENTS>>>
 
 **If there is no target between the markers** (the markers are empty, or contain only options such as `save` or `structure only`), infer it from this conversation:
 
-1. Look for fiction **files** (any format: `.md`, `.docx`, `.epub`, and so on) that were created, edited, or discussed as the work in progress in this session. Do not infer a passage that only exists in the chat; pasted text must be passed explicitly.
+1. Look for fiction **files** (any format: `.md`, `.docx`, `.epub`, and so on) that were created, edited, or discussed as the work in progress in this session. In the Claude apps, a file the user attached in this conversation counts as a file. Do not infer a passage that was only pasted into the chat; pasted text must be passed explicitly.
 2. **Exactly one clear candidate file:** state it on the first line, then proceed with it and any options given:
    `Revising <path> (the file we've been working on). Name a different target to change it.`
    Read the file fresh from disk so you work on its saved state, not an earlier version from the conversation.
@@ -24,9 +24,9 @@ ARGUMENTS>>>
 5. **No candidate:** do not run anything and do not invoke the skill. Reply with exactly these three lines and nothing else:
 
 ```text
-TellTale revise needs something to read: a file, a folder of chapters, or pasted text.
-e.g.  /telltale:revise scene.md   ·   /telltale:help for all options
-Which passage, file, or folder should I revise?
+TellTale revise needs something to read: attach or paste a passage,
+or name a file or folder, e.g. /telltale:revise chapter-03.md
+What should I revise? (/telltale:help for all options)
 ```
 
 ## Running

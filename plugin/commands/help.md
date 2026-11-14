@@ -15,7 +15,7 @@ TellTale: find the tells in your tale
                               Plot changes only as options.
   /telltale:help              This screen.
 
-  <target>  a file, a folder of chapters, or pasted text
+  <target>  a file or attachment, a folder of chapters, or pasted text
   Options   structure only · line-level only ·
             drafted with <model> · save
 
@@ -23,6 +23,7 @@ TellTale: find the tells in your tale
     /telltale:assess chapter-03.md
     /telltale:score manuscript/ save
     /telltale:revise scene.md structure only
+    Or just ask: "Does this chapter read as AI-written?"
 
   Reading a report
     Blocking issues  leftover TODOs/markers; fix first; not scored
@@ -33,6 +34,8 @@ TellTale: find the tells in your tale
   Tips: start with one chapter; manuscript runs are long.
   In Claude Code, reports on folders save to
   telltale-<mode>-<target>-<date>.md in your working directory.
+
+  Feedback or a wrong call: github.com/adyrcz/telltale/issues
 
   A writing-quality signal, not an AI detector or proof of authorship.
 ```

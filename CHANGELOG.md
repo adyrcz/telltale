@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.5 (2026-11-14)
+
+- Every report (and the saved-report chat summary) ends with one line linking to GitHub issue forms for a wrong call, a file-format problem, or a feature idea. It's only a link; nothing is sent.
+- Issue forms: Wrong call, File or format problem, Feature idea. Each reminds people that issues are public and to paste only a short excerpt of their own writing.
+- Built for the Claude apps, where most installs are: the no-target prompt says "attach or paste a passage", attached files count as the file in play, and the help screen mentions attachments and shows a plain-language example.
+- README: a Feedback section near the top.
+
 ## 0.1.4 (2026-10-26)
 
 - **Fix:** the probe script failed on Python 3.9, the `python3` that ships with macOS. CI now runs the checks on 3.9 and 3.12.
