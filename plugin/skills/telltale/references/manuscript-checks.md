@@ -122,13 +122,15 @@ Per-1,000-word densities miss book-wide repetition. Look for:
 
 Sort intentional callbacks (a line deliberately quoted back) from unintentional repeats. Only the unintentional ones are findings.
 
-When a shell is available, `scripts/manuscript_probes.py` does the counting:
+When the skill folder has `scripts/manuscript_probes.py` (installs from GitHub; the directory version leaves it out) and a shell is available, the script does the counting:
 
 ```bash
 python3 -I <skill-dir>/scripts/manuscript_probes.py <manuscript-folder-or-files>
 ```
 
 It reports repeated 9-word passages, dialogue share, em-dash counts, short scene closers, and blocking markers for each file, reading Word, OpenDocument, EPUB, and HTML as well as plain text (see input-formats.md). Read every hit in context before reporting it, and report any file listed as SKIPPED.
+
+Without the script, do the same checks by reading: search across chapters for distinctive phrases you noticed (search tools help when available), tally em dashes and scene closers per chapter, and estimate dialogue share. Report these as estimates, and say that exact counts need the GitHub install of TellTale.
 
 ## 10. M10 Continuity pass (reported separately; not scored)
 

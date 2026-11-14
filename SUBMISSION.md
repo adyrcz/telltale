@@ -49,7 +49,7 @@ find . -name .DS_Store
 ## 3. Publish the repository
 
 1. Create a GitHub repository, for example `adyrcz/telltale`. The plugin sits at the repository root, which avoids several directory review holds that apply to plugins in subfolders.
-2. Commit and push. The directory submission tracks the newest release tag (now `v0.1.5`) (0.1.0 was never tagged; v0.1.1 predates the icon and scanner fixes); point the directory at the newest tag if you want it to track a tag instead of a branch.
+2. Commit and push `main`, then run `python3 -I scripts/build_directory.py` and push the `directory` branch. The directory listing reads the plugin from the repository root of the `directory` branch (its plugin path was set to the repository root at first submission and can't be changed without a new listing). That branch holds `plugin/` minus the helper script, because the directory accepts scripts only from Verified organizations.
 
 ## 4. Let people install it from your repo (self-hosted marketplace)
 
@@ -90,7 +90,7 @@ Requirements:
 Steps in the developer portal at [claude.ai/directory/manage](https://claude.ai/directory/manage):
 
 1. **Submit new** → **Plugin bundle**.
-2. **Source**: repository URL or `owner/repo`; leave plugin path empty (plugin is at the root); optionally set the tracked branch or tag. Select **Validate**, fix anything marked **Blocking**, push, and **Re-validate**.
+2. **Source**: repository URL or `owner/repo`; leave plugin path empty and set the tracked branch to `directory` (the plugin is at that branch's root). Select **Validate**, fix anything marked **Blocking**, push, and **Re-validate**.
 3. **Listing details**: shown from `plugin.json` and `README.md`. Edit those files to change them.
 4. **Data handling**: the plugin reads only the files or text the user points it at, sends nothing to services other than Claude itself (no network calls, no telemetry), has no MCP servers or hooks, and runs nothing automatically. It writes report files to the working directory (only when asked, or for manuscripts; never overwriting) and temporary plain-text copies of non-text files outside the user's manuscript folder. It keeps no data beyond those files. It is not aimed at people under 18. The README's "What it runs and writes" section states all of this for the security scan.
 5. **Compliance**: confirm the contact email and select the four acknowledgements.
@@ -100,7 +100,7 @@ What the directory checks that matters here:
 - README of at least 40 words outside code blocks, and a license (both present).
 - No `.DS_Store` or similar system files; every non-image file under 256 KiB; 512 files or fewer.
 - Valid YAML frontmatter in `SKILL.md` with a text `description` (present). The skill uses only portable frontmatter keys (`name`, `description`, `license`), so it also loads in claude.ai chat and Cowork, where the directory lists plugins too.
-- After you submit, a security scan runs on each new commit. The scan expects everything a plugin runs, sends, or writes to be described in the README; TellTale's "What it runs and writes" section covers it. The skill's helper script (`plugin/skills/telltale/scripts/manuscript_probes.py`) is readable Python using only the standard library, and calls `textutil`, `pandoc`, or `pdftotext` only when they are installed. `scripts/validate.py`, `scripts/run-evals.sh`, the eval suite, and the GitHub workflow are contributor tools outside `plugin/`; they are not installed and never touch user files. In the directory portal, **Plugin path** is `plugin`.
+- After you submit, a security scan runs on each new commit. The scan expects everything a plugin runs, sends, or writes to be described in the README; TellTale's "What it runs and writes" section covers it. The skill's helper script (`plugin/skills/telltale/scripts/manuscript_probes.py`) is readable Python using only the standard library, and calls `textutil`, `pandoc`, or `pdftotext` only when they are installed. `scripts/validate.py`, `scripts/run-evals.sh`, the eval suite, and the GitHub workflow are contributor tools outside `plugin/`; they are not installed and never touch user files. The script is not in the `directory` branch the listing reads. In the directory portal, **Tracked branch or tag** is `directory` and **Plugin path** is the repository root.
 
 After a version passes, select **Publish**; by default an Anthropic reviewer publishes it. Later updates are picked up from the tracked branch; raise `version` each release.
 

@@ -29,6 +29,9 @@ jobs:
       - name: Plugin checks on Python 3.12 (scripts/validate.py)
         run: python3 -I scripts/validate.py
 
+      - name: Directory build accepts only allowed file types
+        run: python3 -I scripts/build_directory.py --check
+
       - uses: actions/setup-node@v4
         with:
           node-version: "22"

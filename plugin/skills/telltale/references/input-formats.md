@@ -23,17 +23,19 @@ If a file can't be read, or yields far less text than its size suggests, **say s
 | Format | How to read it | Notes |
 |---|---|---|
 | `.md`, `.markdown`, `.txt`, `.fountain` | Read directly | Line numbers are usable |
-| `.docx` (Word) | `scripts/manuscript_probes.py --extract`, or macOS `textutil -convert txt`, or `pandoc` | Headers, footers, and footnotes are left out on purpose. Tracked changes and comments are not reliably handled; ask the author to accept changes or export a clean copy if they matter |
-| `.odt` (OpenDocument) | `manuscript_probes.py --extract` | Same notes as Word |
-| `.epub` | `manuscript_probes.py --extract` | Chapters come out in the book's own reading order (its spine), not file order. Front and back matter (copyright page, acknowledgments) are included; ignore them in the assessment |
-| `.rtf`, `.doc` | `manuscript_probes.py --extract` (uses macOS `textutil`, or `pandoc` if installed) | If neither tool exists, ask for a `.docx` or `.md` export |
-| `.html` | `manuscript_probes.py --extract` | Scripts, styles, and the page head are dropped |
+| `.docx` (Word) | Claude's own file reader (attachments in the Claude apps), `manuscript_probes.py --extract`, macOS `textutil -convert txt`, or `pandoc` | Headers, footers, and footnotes are left out on purpose. Tracked changes and comments are not reliably handled; ask the author to accept changes or export a clean copy if they matter |
+| `.odt` (OpenDocument) | `manuscript_probes.py --extract`, `textutil`, or `pandoc` | Same notes as Word. If none is available, ask for a `.docx` export |
+| `.epub` | `manuscript_probes.py --extract`, or `pandoc` | Chapters must come out in the book's own reading order (its spine), not file order. Front and back matter (copyright page, acknowledgments) are included; ignore them in the assessment. If no tool is available, ask for a `.docx` or `.md` export |
+| `.rtf`, `.doc` | `manuscript_probes.py --extract`, macOS `textutil`, or `pandoc` | If none is available, ask for a `.docx` or `.md` export |
+| `.html` | Read directly, ignoring markup, or `manuscript_probes.py --extract` | Skip scripts, styles, and the page head |
 | `.pdf` | Claude's own file reader, or `manuscript_probes.py --extract` when `pdftotext` is installed | See "PDF artifacts" below. Prefer the author's source file when one exists |
 | `.pages`, Scrivener projects, Google Docs | **Export first** | Ask for a `.docx` (or `.md`) export: Pages → File → Export To → Word; Scrivener → Compile; Google Docs → File → Download → Microsoft Word |
 
 ## 3. Converting
 
-When a shell is available, one command makes plain-text copies of a whole folder (or of single files), in natural chapter order:
+`manuscript_probes.py` is in the skill's `scripts/` folder in installs from GitHub; the directory version leaves it out. Without it, use the system tools in the table (for example `textutil -convert txt -output <copy-dir>/ch01.txt ch01.docx` on macOS, or `pandoc ch01.docx -t plain -o <copy-dir>/ch01.txt`), or Claude's own file reader, and apply section 4's checks to each copy yourself.
+
+When the script and a shell are available, one command makes plain-text copies of a whole folder (or of single files), in natural chapter order:
 
 ```bash
 python3 -I <skill-dir>/scripts/manuscript_probes.py --extract <copy-dir> <manuscript-folder-or-files>
@@ -47,8 +49,8 @@ Without a shell (for example, in a chat-only surface), read the file with the to
 
 ## 4. After conversion
 
-- **Check the copy is plausible.** Compare the word count with what the author expects, or with the file's size. A 40 KB Word file that yields 12 words is a failed read, not a short chapter. The script flags these automatically.
-- **PDF artifacts.** Text pulled from a PDF can carry page numbers, running heads (the book or chapter title repeated on every page), hyphenation across line breaks, and footnote numbers. The script removes lone page numbers and lines repeated at the top or bottom of many pages, and rejoins hyphenated words. Treat anything that still looks like page furniture as conversion residue: never count it as a repeated passage, a one-line closer, or any other tell.
+- **Check the copy is plausible.** Compare the word count with what the author expects, or with the file's size. A 40 KB Word file that yields 12 words is a failed read, not a short chapter. The script, when used, flags these automatically.
+- **PDF artifacts.** Text pulled from a PDF can carry page numbers, running heads (the book or chapter title repeated on every page), hyphenation across line breaks, and footnote numbers. The script, when used, removes lone page numbers and lines repeated at the top or bottom of many pages, and rejoins hyphenated words; otherwise ignore them yourself. Treat anything that still looks like page furniture as conversion residue: never count it as a repeated passage, a one-line closer, or any other tell.
 - **Citations.** Use chapter and paragraph numbers from the copy (¶ counts blank-line-separated paragraphs). For `.md` and `.txt` originals, line numbers are fine too.
 - **Front matter.** For an EPUB or a compiled manuscript, skip the title page, copyright page, table of contents, and acknowledgments.
 

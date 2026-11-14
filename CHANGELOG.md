@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6 (2026-11-14)
+
+- **Directory build without scripts.** The plugin directory now accepts scripts only from Verified organizations, so its version of TellTale leaves out the optional `manuscript_probes.py` helper. It's built from `plugin/` onto a `directory` branch by `scripts/build_directory.py`, which also checks that every file is a type the directory accepts. Installs from GitHub keep the script.
+- Without the script, the skill reads Word, EPUB, and OpenDocument files with Claude's own reader or with `textutil` or `pandoc`, and reports manuscript counts (repeats, dialogue share, em dashes) as estimates.
+- README: the "runs code" warning now applies only to installs from GitHub.
+
 ## 0.1.5 (2026-11-14)
 
 - Every report (and the saved-report chat summary) ends with one line linking to GitHub issue forms for a wrong call, a file-format problem, or a feature idea. It's only a link; nothing is sent.

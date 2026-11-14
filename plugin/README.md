@@ -29,7 +29,7 @@ claude plugin install telltale@anthropic-plugin-directory
 
 The directory version is the reviewed release.
 
-**When you install, Claude warns that TellTale "includes components that run code."** That warning appears for any plugin that ships a script. TellTale ships one: [`manuscript_probes.py`](https://github.com/adyrcz/telltale/blob/main/plugin/skills/telltale/scripts/manuscript_probes.py), a short, readable Python script that uses only the standard library. It reads only the files you point TellTale at, makes no network calls, and runs only through Claude's normal tool-permission prompt, so you see each run. See [What it runs and writes](#what-it-runs-and-writes) for everything else.
+The directory version is instructions and reference files only; it ships no scripts. Installs from this repository add one optional helper script, [`manuscript_probes.py`](https://github.com/adyrcz/telltale/blob/main/plugin/skills/telltale/scripts/manuscript_probes.py), which gives exact counts on full manuscripts and reads Word, EPUB, and OpenDocument files directly. Because of it, Claude may warn that the repository install "includes components that run code." It's a short, readable Python script that uses only the standard library, reads only the files you point TellTale at, makes no network calls, and runs only through Claude's normal tool-permission prompt. Without it, TellTale reads those formats with Claude's own tools or tools already on your machine, and reports manuscript counts as estimates. See [What it runs and writes](#what-it-runs-and-writes).
 
 **From this repository**, for the latest unreviewed version. From inside Claude Code:
 
@@ -240,11 +240,11 @@ Manuscript reports add:
 
 ## What it runs and writes
 
-TellTale is instructions and reference files for Claude, plus one optional helper script. It has no hooks, no MCP servers, no background processes, and nothing that runs on its own.
+TellTale is instructions and reference files for Claude. Installs from this repository also include one optional helper script; the directory version does not. It has no hooks, no MCP servers, no background processes, and nothing that runs on its own.
 
 **Reads.** Only the files, folders, or text you point it at (or, with a bare command, the file you were already working on in the session).
 
-**Runs.** Claude's standard file tools (read, search, list). For manuscripts and non-text formats, Claude may also run `skills/telltale/scripts/manuscript_probes.py` (in this repo, under `plugin/`), a Python script that uses only the standard library. To convert RTF, `.doc`, or PDF it calls tools already on your machine if they're installed: `textutil` (built into macOS), `pandoc`, or `pdftotext`. Nothing else is executed.
+**Runs.** Claude's standard file tools (read, search, list). For manuscripts and non-text formats, Claude may also run `skills/telltale/scripts/manuscript_probes.py` (repository installs only; in this repo, under `plugin/`), a Python script that uses only the standard library. Without it, Claude may use `textutil` or `pandoc` to make plain-text copies of Word, EPUB, or OpenDocument files. To convert RTF, `.doc`, or PDF it calls tools already on your machine if they're installed: `textutil` (built into macOS), `pandoc`, or `pdftotext`. Nothing else is executed.
 
 **Sends.** The plugin makes no network calls and collects no telemetry. The text it reads is processed by Claude as part of your session, under the same terms as anything else you share with Claude.
 
@@ -318,7 +318,7 @@ plugin/                  the plugin itself (what users install)
       manuscript-checks.md     book-scale checks M1–M10
       input-formats.md         reading Word, EPUB, PDF, and other formats safely
     scripts/
-      manuscript_probes.py     reads .md/.docx/.odt/.epub/.html (+ RTF, PDF via system tools); counts and plain-text extraction
+      manuscript_probes.py     optional; reads .md/.docx/.odt/.epub/.html (+ RTF, PDF via system tools); counts and extraction. Left out of the directory build
     examples/
       passage-assessment.md
       story-structure-assessment.md
@@ -328,6 +328,7 @@ plugin/                  the plugin itself (what users install)
 .github/workflows/       validate.yml: runs the checks on every pull request
 evals/                   claude plugin eval cases (run with scripts/run-evals.sh)
 scripts/validate.py      static checks (no dependencies)
+scripts/build_directory.py   builds the `directory` branch the plugin directory reads (plugin/ minus scripts)
 scripts/run-evals.sh     runs the eval suite against plugin/
 PRIVACY.md               what the plugin reads, writes, and sends (nothing)
 ```
@@ -358,6 +359,16 @@ scripts/run-evals.sh --runs 1 --tag core --no-publish
 The [eval README](https://github.com/adyrcz/telltale/blob/main/evals/README.md) covers the full suite, including the cases that need `--scaffold`.
 
 Keep `SKILL.md` short; put detail in `references/`. Keep the honest framing: no detector-evasion claims, no authorship verdicts. Bump `version` in both `plugin/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` for any user-visible change, and note it in `CHANGELOG.md`.
+
+**Releasing to the plugin directory.** The directory reads the `directory` branch, which holds the plugin at its root without the helper script (the directory accepts scripts only from Verified organizations). After committing a release on `main`, rebuild and push it:
+
+```bash
+python3 -I scripts/build_directory.py
+```
+
+```bash
+git push origin main directory
+```
 
 ## License
 
